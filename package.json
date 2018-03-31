@@ -1,0 +1,33 @@
+{
+  "name": "manage-packages",
+  "main": "./lib/manage-packages",
+  "version": "0.0.0",
+  "author": {
+    "name": "Tobias Happ",
+    "email": "tobias.happ@gmx.de"
+  },
+  "description": "Syncs installed packages with a file",
+  "keywords": [
+    "manage-packages",
+    "package-list",
+    "package-management"
+  ],
+  "repository": "https://github.com/Gerschtli/manage-packages",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "scripts": {
+    "lint": "eslint lib/** spec/**",
+    "test": "npm run lint && apm test"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.0.0",
+    "eslint": "^3.8.0",
+    "eslint-config-airbnb-base": "^9.0.0",
+    "eslint-plugin-import": "^2.0.1"
+  },
+  "dependencies": {
+    "season": "^6.0.2"
+  }
+}
