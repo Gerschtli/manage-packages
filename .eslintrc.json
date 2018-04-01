@@ -9,7 +9,6 @@
     "atom": true
   },
   "rules": {
-    "class-methods-use-this": 0,
     "global-require": 0
   },
   "settings": {
