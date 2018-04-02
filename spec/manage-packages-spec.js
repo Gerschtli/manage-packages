@@ -68,6 +68,7 @@ describe('ManagePackages', () => {
       assert.calledOnce(stubGetFile);
       assert.calledOnce(stubExistsSync);
       assert.calledTwice(stubSyncFromFile);
+
       assert.calledOnce(stubOnDidChange);
     });
   });
@@ -78,6 +79,7 @@ describe('ManagePackages', () => {
 
     const stubGetFile = stub(List, 'getFile').returns(file);
     const stubExistsSync = stub(file, 'existsSync').returns(true);
+    const stubSyncFromFile = stub(List, 'syncFromFile');
     const stubCreateFile = stub(List, 'createFile');
 
     const stubOnDidRename = stub(file, 'onDidRename').returns(disposable);
@@ -88,11 +90,13 @@ describe('ManagePackages', () => {
     runs(() => {
       stubGetFile.restore();
       stubExistsSync.restore();
+      stubSyncFromFile.restore();
       stubCreateFile.restore();
       stubOnDidRename.restore();
 
       assert.calledOnce(stubGetFile);
       assert.calledOnce(stubExistsSync);
+      assert.calledOnce(stubSyncFromFile);
       assert.calledOnce(stubCreateFile);
       assert.calledWith(stubCreateFile, file);
 
@@ -106,6 +110,7 @@ describe('ManagePackages', () => {
 
     const stubGetFile = stub(List, 'getFile').returns(file);
     const stubExistsSync = stub(file, 'existsSync').returns(true);
+    const stubSyncFromFile = stub(List, 'syncFromFile');
     const stubCreateFile = stub(List, 'createFile');
 
     const stubOnDidDelete = stub(file, 'onDidDelete').returns(disposable);
@@ -116,11 +121,13 @@ describe('ManagePackages', () => {
     runs(() => {
       stubGetFile.restore();
       stubExistsSync.restore();
+      stubSyncFromFile.restore();
       stubCreateFile.restore();
       stubOnDidDelete.restore();
 
       assert.calledOnce(stubGetFile);
       assert.calledOnce(stubExistsSync);
+      assert.calledOnce(stubSyncFromFile);
       assert.calledOnce(stubCreateFile);
       assert.calledWith(stubCreateFile, file);
 
@@ -134,6 +141,7 @@ describe('ManagePackages', () => {
 
     const stubGetFile = stub(List, 'getFile').returns(file);
     const stubExistsSync = stub(file, 'existsSync').returns(true);
+    const stubSyncFromFile = stub(List, 'syncFromFile');
     const stubSyncToFile = stub(List, 'syncToFile');
 
     const stubOnActivateInitialPackages = stub(atom.packages, 'onDidActivateInitialPackages').returns(disposable);
@@ -146,12 +154,14 @@ describe('ManagePackages', () => {
     runs(() => {
       stubGetFile.restore();
       stubExistsSync.restore();
+      stubSyncFromFile.restore();
       stubSyncToFile.restore();
       stubOnActivateInitialPackages.restore();
       stubOnLoadPackage.restore();
 
       assert.calledOnce(stubGetFile);
       assert.calledOnce(stubExistsSync);
+      assert.calledOnce(stubSyncFromFile);
 
       assert.calledOnce(stubOnActivateInitialPackages);
       assert.calledOnce(stubOnLoadPackage);
@@ -159,12 +169,13 @@ describe('ManagePackages', () => {
     });
   });
 
-  it('syncs to file on package install', () => {
+  it('syncs to file on package uninstall', () => {
     const file = new File('/tmp/example');
     const disposable = new Disposable();
 
     const stubGetFile = stub(List, 'getFile').returns(file);
     const stubExistsSync = stub(file, 'existsSync').returns(true);
+    const stubSyncFromFile = stub(List, 'syncFromFile');
     const stubSyncToFile = stub(List, 'syncToFile');
 
     const stubOnActivateInitialPackages = stub(atom.packages, 'onDidActivateInitialPackages').returns(disposable);
@@ -177,12 +188,14 @@ describe('ManagePackages', () => {
     runs(() => {
       stubGetFile.restore();
       stubExistsSync.restore();
+      stubSyncFromFile.restore();
       stubSyncToFile.restore();
       stubOnActivateInitialPackages.restore();
       stubOnUnloadPackage.restore();
 
       assert.calledOnce(stubGetFile);
       assert.calledOnce(stubExistsSync);
+      assert.calledOnce(stubSyncFromFile);
 
       assert.calledOnce(stubOnActivateInitialPackages);
       assert.calledOnce(stubOnUnloadPackage);
