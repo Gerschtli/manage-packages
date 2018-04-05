@@ -98,6 +98,8 @@ describe('List', () => {
     });
 
     it('with adding to apm queue', () => {
+      atom.config.set('manage-packages.uninstall', true);
+
       const stubGetFilePath = stub(List, 'getFilePath').returns('/tmp/example');
       const stubReadFile = stub(CSON, 'readFileSync').returns({ packages: ['a', 'b', 'c'] });
       const stubGetAllPackages = stub(List, 'getAllPackages').returns(['c', 'd']);
@@ -117,6 +119,29 @@ describe('List', () => {
       assert.calledWith(stubApmQueue.firstCall, 'a', true);
       assert.calledWith(stubApmQueue.secondCall, 'b', true);
       assert.calledWith(stubApmQueue.thirdCall, 'd', false);
+    });
+
+    it('with adding to apm queue without uninstalling', () => {
+      atom.config.set('manage-packages.uninstall', false);
+
+      const stubGetFilePath = stub(List, 'getFilePath').returns('/tmp/example');
+      const stubReadFile = stub(CSON, 'readFileSync').returns({ packages: ['a', 'b', 'c'] });
+      const stubGetAllPackages = stub(List, 'getAllPackages').returns(['c', 'd']);
+      const stubApmQueue = stub(Apm, 'addToApmQueue');
+
+      List.syncFromFile();
+
+      stubGetFilePath.restore();
+      stubReadFile.restore();
+      stubGetAllPackages.restore();
+      stubApmQueue.restore();
+
+      assert.calledOnce(stubGetFilePath);
+      assert.calledOnce(stubReadFile);
+      assert.calledOnce(stubGetAllPackages);
+      assert.calledTwice(stubApmQueue);
+      assert.calledWith(stubApmQueue.firstCall, 'a', true);
+      assert.calledWith(stubApmQueue.secondCall, 'b', true);
     });
   });
 
