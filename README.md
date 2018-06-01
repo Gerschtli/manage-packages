@@ -5,8 +5,8 @@ package list to `~/.atom/packages.cson`.
 
 It automatically creates and installs all packages of `~/.atom/packages.cson` and watches the file for changes.
 
-If you install or uninstall a package in atom, `~/.atom/packages.cson` will be updated. It can be configured, if
-`~/.atom/packages.cson` should be an exclusive list or if uninstalls are allowed.
+If you install or uninstall a package in atom, `~/.atom/packages.cson` will be updated. It can be configured, whether
+`~/.atom/packages.cson` should be an exclusive list of all installed packages or uninstalls are forbidden.
 
 Example content of `~/.atom/packages.cson`:
 
