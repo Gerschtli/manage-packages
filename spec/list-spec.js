@@ -64,6 +64,29 @@ describe('List', () => {
     assert.calledWith(stubJoin, '/atom/config', 'packages.cson');
   });
 
+  describe('tests notify', () => {
+    it('when list empty', () => {
+      const stubAddInfo = stub(atom.notifications, 'addInfo');
+
+      List.notify('name', []);
+
+      stubAddInfo.restore();
+
+      assert.notCalled(stubAddInfo);
+    });
+
+    it('when list empty', () => {
+      const stubAddInfo = stub(atom.notifications, 'addInfo');
+
+      List.notify('Title', ['test1', 'test2']);
+
+      stubAddInfo.restore();
+
+      assert.calledOnce(stubAddInfo);
+      assert.calledWith(stubAddInfo, 'Title', { detail: 'test1\ntest2' });
+    });
+  });
+
   describe('tests syncFromFile', () => {
     it('when content of file is empty', () => {
       const stubGetFilePath = stub(List, 'getFilePath').returns('/tmp/example');
@@ -103,6 +126,7 @@ describe('List', () => {
       const stubGetFilePath = stub(List, 'getFilePath').returns('/tmp/example');
       const stubReadFile = stub(CSON, 'readFileSync').returns({ packages: ['a', 'b', 'c'] });
       const stubGetAllPackages = stub(List, 'getAllPackages').returns(['c', 'd']);
+      const stubNotify = stub(List, 'notify');
       const stubApmQueue = stub(Apm, 'addToApmQueue');
 
       List.syncFromFile();
@@ -110,11 +134,15 @@ describe('List', () => {
       stubGetFilePath.restore();
       stubReadFile.restore();
       stubGetAllPackages.restore();
+      stubNotify.restore();
       stubApmQueue.restore();
 
       assert.calledOnce(stubGetFilePath);
       assert.calledOnce(stubReadFile);
       assert.calledOnce(stubGetAllPackages);
+      assert.calledTwice(stubNotify);
+      assert.calledWith(stubNotify.firstCall, 'Packages to install', ['a', 'b']);
+      assert.calledWith(stubNotify.secondCall, 'Packages to uninstall', ['d']);
       assert.calledThrice(stubApmQueue);
       assert.calledWith(stubApmQueue.firstCall, 'a', true);
       assert.calledWith(stubApmQueue.secondCall, 'b', true);
@@ -127,6 +155,7 @@ describe('List', () => {
       const stubGetFilePath = stub(List, 'getFilePath').returns('/tmp/example');
       const stubReadFile = stub(CSON, 'readFileSync').returns({ packages: ['a', 'b', 'c'] });
       const stubGetAllPackages = stub(List, 'getAllPackages').returns(['c', 'd']);
+      const stubNotify = stub(List, 'notify');
       const stubApmQueue = stub(Apm, 'addToApmQueue');
 
       List.syncFromFile();
@@ -134,11 +163,14 @@ describe('List', () => {
       stubGetFilePath.restore();
       stubReadFile.restore();
       stubGetAllPackages.restore();
+      stubNotify.restore();
       stubApmQueue.restore();
 
       assert.calledOnce(stubGetFilePath);
       assert.calledOnce(stubReadFile);
       assert.calledOnce(stubGetAllPackages);
+      assert.calledOnce(stubNotify);
+      assert.calledWith(stubNotify.firstCall, 'Packages to install', ['a', 'b']);
       assert.calledTwice(stubApmQueue);
       assert.calledWith(stubApmQueue.firstCall, 'a', true);
       assert.calledWith(stubApmQueue.secondCall, 'b', true);
