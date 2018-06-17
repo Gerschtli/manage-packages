@@ -2,6 +2,7 @@
 
 import { Disposable, File } from 'atom';
 import { assert, restore, stub } from 'sinon';
+import FileWatcher from '../lib/file-watcher';
 import List from '../lib/list';
 
 describe('ManagePackages', () => {
@@ -49,6 +50,7 @@ describe('ManagePackages', () => {
     const stubGetFile = stub(List, 'getFile').returns(file);
     const stubExistsSync = stub(file, 'existsSync').returns(true);
     const stubSyncFromFile = stub(List, 'syncFromFile');
+    const stubHasChanged = stub(FileWatcher, 'hasChanged').returns(true);
 
     const stubOnDidChange = stub(file, 'onDidChange').returns(disposable);
     stubOnDidChange.yields();
@@ -59,6 +61,31 @@ describe('ManagePackages', () => {
       assert.calledOnce(stubGetFile);
       assert.calledOnce(stubExistsSync);
       assert.calledTwice(stubSyncFromFile);
+      assert.calledOnce(stubHasChanged);
+
+      assert.calledOnce(stubOnDidChange);
+    });
+  });
+
+  it('syncs from file if file changed but content same', () => {
+    const file = new File('/tmp/example');
+    const disposable = new Disposable();
+
+    const stubGetFile = stub(List, 'getFile').returns(file);
+    const stubExistsSync = stub(file, 'existsSync').returns(true);
+    const stubSyncFromFile = stub(List, 'syncFromFile');
+    const stubHasChanged = stub(FileWatcher, 'hasChanged').returns(false);
+
+    const stubOnDidChange = stub(file, 'onDidChange').returns(disposable);
+    stubOnDidChange.yields();
+
+    waitsForPromise(() => atom.packages.activatePackage('manage-packages'));
+
+    runs(() => {
+      assert.calledOnce(stubGetFile);
+      assert.calledOnce(stubExistsSync);
+      assert.calledOnce(stubSyncFromFile);
+      assert.calledOnce(stubHasChanged);
 
       assert.calledOnce(stubOnDidChange);
     });
