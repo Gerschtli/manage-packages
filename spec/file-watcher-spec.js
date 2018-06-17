@@ -14,20 +14,20 @@ describe('FileWatcher', () => {
     const file = new File('/tmp/example');
 
     const stubRead = stub(file, 'readSync')
-        .onFirstCall()
-          .returns('content')
-        .onSecondCall()
-          .returns('content')
-        .onThirdCall()
-          .returns('bla');
+      .onFirstCall()
+      .returns('content')
+      .onSecondCall()
+      .returns('content')
+      .onThirdCall()
+      .returns('bla');
 
     const stubSha256 = stub(sha256Module, 'sha256')
-        .onFirstCall()
-          .returns('123')
-        .onSecondCall()
-          .returns('123')
-        .onThirdCall()
-          .returns('234');
+      .onFirstCall()
+      .returns('123')
+      .onSecondCall()
+      .returns('123')
+      .onThirdCall()
+      .returns('234');
 
     expect(FileWatcher.hasChanged(file)).toEqual(true);
 
