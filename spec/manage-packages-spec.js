@@ -1,10 +1,14 @@
 'use babel';
 
 import { Disposable, File } from 'atom';
-import { assert, stub } from 'sinon';
+import { assert, restore, stub } from 'sinon';
 import List from '../lib/list';
 
 describe('ManagePackages', () => {
+  afterEach(() => {
+    restore();
+  });
+
   it('creates file if not exists', () => {
     const file = new File('/tmp/example');
 
@@ -15,10 +19,6 @@ describe('ManagePackages', () => {
     waitsForPromise(() => atom.packages.activatePackage('manage-packages'));
 
     runs(() => {
-      stubGetFile.restore();
-      stubExistsSync.restore();
-      stubCreateFile.restore();
-
       assert.calledOnce(stubGetFile);
       assert.calledOnce(stubExistsSync);
       assert.calledOnce(stubCreateFile);
@@ -36,10 +36,6 @@ describe('ManagePackages', () => {
     waitsForPromise(() => atom.packages.activatePackage('manage-packages'));
 
     runs(() => {
-      stubGetFile.restore();
-      stubExistsSync.restore();
-      stubSyncFromFile.restore();
-
       assert.calledOnce(stubGetFile);
       assert.calledOnce(stubExistsSync);
       assert.calledOnce(stubSyncFromFile);
@@ -60,11 +56,6 @@ describe('ManagePackages', () => {
     waitsForPromise(() => atom.packages.activatePackage('manage-packages'));
 
     runs(() => {
-      stubGetFile.restore();
-      stubExistsSync.restore();
-      stubOnDidChange.restore();
-      stubSyncFromFile.restore();
-
       assert.calledOnce(stubGetFile);
       assert.calledOnce(stubExistsSync);
       assert.calledTwice(stubSyncFromFile);
@@ -88,12 +79,6 @@ describe('ManagePackages', () => {
     waitsForPromise(() => atom.packages.activatePackage('manage-packages'));
 
     runs(() => {
-      stubGetFile.restore();
-      stubExistsSync.restore();
-      stubSyncFromFile.restore();
-      stubCreateFile.restore();
-      stubOnDidRename.restore();
-
       assert.calledOnce(stubGetFile);
       assert.calledOnce(stubExistsSync);
       assert.calledOnce(stubSyncFromFile);
@@ -119,12 +104,6 @@ describe('ManagePackages', () => {
     waitsForPromise(() => atom.packages.activatePackage('manage-packages'));
 
     runs(() => {
-      stubGetFile.restore();
-      stubExistsSync.restore();
-      stubSyncFromFile.restore();
-      stubCreateFile.restore();
-      stubOnDidDelete.restore();
-
       assert.calledOnce(stubGetFile);
       assert.calledOnce(stubExistsSync);
       assert.calledOnce(stubSyncFromFile);
@@ -152,13 +131,6 @@ describe('ManagePackages', () => {
     waitsForPromise(() => atom.packages.activatePackage('manage-packages'));
 
     runs(() => {
-      stubGetFile.restore();
-      stubExistsSync.restore();
-      stubSyncFromFile.restore();
-      stubSyncToFile.restore();
-      stubOnActivateInitialPackages.restore();
-      stubOnLoadPackage.restore();
-
       assert.calledOnce(stubGetFile);
       assert.calledOnce(stubExistsSync);
       assert.calledOnce(stubSyncFromFile);
@@ -186,13 +158,6 @@ describe('ManagePackages', () => {
     waitsForPromise(() => atom.packages.activatePackage('manage-packages'));
 
     runs(() => {
-      stubGetFile.restore();
-      stubExistsSync.restore();
-      stubSyncFromFile.restore();
-      stubSyncToFile.restore();
-      stubOnActivateInitialPackages.restore();
-      stubOnUnloadPackage.restore();
-
       assert.calledOnce(stubGetFile);
       assert.calledOnce(stubExistsSync);
       assert.calledOnce(stubSyncFromFile);

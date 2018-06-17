@@ -1,6 +1,6 @@
 'use babel';
 
-import { assert, stub } from 'sinon';
+import { assert, restore, stub } from 'sinon';
 import Apm from '../lib/apm';
 import List from '../lib/list';
 
@@ -10,13 +10,15 @@ describe('Apm', () => {
     Apm.runningProcess = null;
   });
 
+  afterEach(() => {
+    restore();
+  });
+
   it('tests addToApmQueue', () => {
     const stubStartNext = stub(Apm, 'startNextInQueue');
 
     Apm.addToApmQueue('name', true);
     expect(Apm.queue).toEqual([{ name: 'name', install: true }]);
-
-    stubStartNext.restore();
 
     assert.calledOnce(stubStartNext);
   });
@@ -28,8 +30,6 @@ describe('Apm', () => {
       Apm.executeApm('name', true);
       expect(Apm.runningProcess).toBe('running');
 
-      stubStartProcess.restore();
-
       assert.calledOnce(stubStartProcess);
       assert.calledWith(stubStartProcess, ['install', 'name']);
     });
@@ -40,10 +40,6 @@ describe('Apm', () => {
       const stubStartNext = stub(Apm, 'startNextInQueue');
 
       Apm.executeApm('name', true);
-
-      stubStartProcess.restore();
-      stubAddSuccess.restore();
-      stubStartNext.restore();
 
       assert.calledOnce(stubStartProcess);
       assert.calledWith(stubStartProcess, ['install', 'name']);
@@ -59,10 +55,6 @@ describe('Apm', () => {
 
       Apm.executeApm('name', true);
 
-      stubStartProcess.restore();
-      stubAddError.restore();
-      stubStartNext.restore();
-
       assert.calledOnce(stubStartProcess);
       assert.calledWith(stubStartProcess, ['install', 'name']);
       assert.calledOnce(stubAddError);
@@ -76,10 +68,6 @@ describe('Apm', () => {
       const stubStartNext = stub(Apm, 'startNextInQueue');
 
       Apm.executeApm('name', false);
-
-      stubStartProcess.restore();
-      stubAddSuccess.restore();
-      stubStartNext.restore();
 
       assert.calledOnce(stubStartProcess);
       assert.calledWith(stubStartProcess, ['uninstall', 'name']);
@@ -95,10 +83,6 @@ describe('Apm', () => {
 
       Apm.executeApm('name', false);
 
-      stubStartProcess.restore();
-      stubAddError.restore();
-      stubStartNext.restore();
-
       assert.calledOnce(stubStartProcess);
       assert.calledWith(stubStartProcess, ['uninstall', 'name']);
       assert.calledOnce(stubAddError);
@@ -113,8 +97,6 @@ describe('Apm', () => {
 
       Apm.startNextInQueue();
 
-      stubExecuteApm.restore();
-
       assert.notCalled(stubExecuteApm);
     });
 
@@ -127,8 +109,6 @@ describe('Apm', () => {
       const stubExecuteApm = stub(Apm, 'executeApm');
 
       Apm.startNextInQueue();
-
-      stubExecuteApm.restore();
 
       assert.notCalled(stubExecuteApm);
     });
@@ -143,9 +123,6 @@ describe('Apm', () => {
 
       Apm.startNextInQueue();
       expect(Apm.queue).toEqual([]);
-
-      stubAllPackages.restore();
-      stubExecuteApm.restore();
 
       assert.calledOnce(stubAllPackages);
       assert.calledOnce(stubExecuteApm);
@@ -163,9 +140,6 @@ describe('Apm', () => {
 
       Apm.startNextInQueue();
       expect(Apm.queue).toEqual([]);
-
-      stubAllPackages.restore();
-      stubExecuteApm.restore();
 
       assert.calledTwice(stubAllPackages);
       assert.calledOnce(stubExecuteApm);

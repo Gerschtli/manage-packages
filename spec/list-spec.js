@@ -1,13 +1,17 @@
 'use babel';
 
 import { File } from 'atom';
-import { assert, stub } from 'sinon';
+import { assert, restore, stub } from 'sinon';
 import path from 'path';
 import CSON from 'season';
 import Apm from '../lib/apm';
 import List from '../lib/list';
 
 describe('List', () => {
+  afterEach(() => {
+    restore();
+  });
+
   it('tests createFile', () => {
     const file = new File('/tmp/example');
 
@@ -15,9 +19,6 @@ describe('List', () => {
     const stubSyncToFile = stub(List, 'syncToFile');
 
     List.createFile(file);
-
-    stubCreate.restore();
-    stubSyncToFile.restore();
 
     assert.calledOnce(stubCreate);
     assert.calledOnce(stubSyncToFile);
@@ -31,9 +32,6 @@ describe('List', () => {
 
     expect(List.getAllPackages()).toEqual(['b']);
 
-    stubGetNames.restore();
-    stubIsBundled.restore();
-
     assert.calledOnce(stubGetNames);
     assert.calledTwice(stubIsBundled);
   });
@@ -45,8 +43,6 @@ describe('List', () => {
     expect(file.path).toBe('/tmp/example');
     expect(file.symlink).toBe(true);
 
-    stubGetFilePath.restore();
-
     assert.calledOnce(stubGetFilePath);
   });
 
@@ -55,9 +51,6 @@ describe('List', () => {
     const stubJoin = stub(path, 'join').returns('/atom/config/packages.cson');
 
     expect(List.getFilePath()).toBe('/atom/config/packages.cson');
-
-    stubConfigPath.restore();
-    stubJoin.restore();
 
     assert.calledOnce(stubConfigPath);
     assert.calledOnce(stubJoin);
@@ -70,8 +63,6 @@ describe('List', () => {
 
       List.notify('name', []);
 
-      stubAddInfo.restore();
-
       assert.notCalled(stubAddInfo);
     });
 
@@ -79,8 +70,6 @@ describe('List', () => {
       const stubAddInfo = stub(atom.notifications, 'addInfo');
 
       List.notify('Title', ['test1', 'test2']);
-
-      stubAddInfo.restore();
 
       assert.calledOnce(stubAddInfo);
       assert.calledWith(stubAddInfo, 'Title', { detail: 'test1\ntest2' });
@@ -95,10 +84,6 @@ describe('List', () => {
 
       List.syncFromFile();
 
-      stubGetFilePath.restore();
-      stubReadFile.restore();
-      stubSyncToFile.restore();
-
       assert.calledOnce(stubGetFilePath);
       assert.calledOnce(stubReadFile);
       assert.calledOnce(stubSyncToFile);
@@ -110,10 +95,6 @@ describe('List', () => {
       const stubSyncToFile = stub(List, 'syncToFile');
 
       List.syncFromFile();
-
-      stubGetFilePath.restore();
-      stubReadFile.restore();
-      stubSyncToFile.restore();
 
       assert.calledOnce(stubGetFilePath);
       assert.calledOnce(stubReadFile);
@@ -130,12 +111,6 @@ describe('List', () => {
       const stubApmQueue = stub(Apm, 'addToApmQueue');
 
       List.syncFromFile();
-
-      stubGetFilePath.restore();
-      stubReadFile.restore();
-      stubGetAllPackages.restore();
-      stubNotify.restore();
-      stubApmQueue.restore();
 
       assert.calledOnce(stubGetFilePath);
       assert.calledOnce(stubReadFile);
@@ -160,12 +135,6 @@ describe('List', () => {
 
       List.syncFromFile();
 
-      stubGetFilePath.restore();
-      stubReadFile.restore();
-      stubGetAllPackages.restore();
-      stubNotify.restore();
-      stubApmQueue.restore();
-
       assert.calledOnce(stubGetFilePath);
       assert.calledOnce(stubReadFile);
       assert.calledOnce(stubGetAllPackages);
@@ -183,10 +152,6 @@ describe('List', () => {
     const stubWriteFile = stub(CSON, 'writeFileSync');
 
     List.syncToFile();
-
-    stubGetFilePath.restore();
-    stubWriteFile.restore();
-    stubGetAllPackages.restore();
 
     assert.calledOnce(stubGetFilePath);
     assert.calledOnce(stubGetAllPackages);
