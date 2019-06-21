@@ -1,11 +1,13 @@
 'use babel';
 
 import { File } from 'atom';
+import CSON from 'season';
 import { assert, restore, stub } from 'sinon';
 import path from 'path';
-import CSON from 'season';
+
 import Apm from '../lib/apm';
 import List from '../lib/list';
+import Util from '../lib/util';
 
 describe('List', () => {
   afterEach(() => {
@@ -22,18 +24,6 @@ describe('List', () => {
 
     assert.calledOnce(stubCreate);
     assert.calledOnce(stubSyncToFile);
-  });
-
-  it('tests getAllPackages', () => {
-    const stubGetNames = stub(atom.packages, 'getAvailablePackageNames').returns(['a', 'b']);
-    const stubIsBundled = stub(atom.packages, 'isBundledPackage');
-    stubIsBundled.withArgs('a').returns(true);
-    stubIsBundled.withArgs('b').returns(false);
-
-    expect(List.getAllPackages()).toEqual(['b']);
-
-    assert.calledOnce(stubGetNames);
-    assert.calledTwice(stubIsBundled);
   });
 
   it('tests getFile', () => {
@@ -106,7 +96,7 @@ describe('List', () => {
 
       const stubGetFilePath = stub(List, 'getFilePath').returns('/tmp/example');
       const stubReadFile = stub(CSON, 'readFileSync').returns({ packages: ['a', 'b', 'c'] });
-      const stubGetAllPackages = stub(List, 'getAllPackages').returns(['c', 'd']);
+      const stubGetAllPackages = stub(Util, 'getAllPackages').returns(['c', 'd']);
       const stubNotify = stub(List, 'notify');
       const stubApmQueue = stub(Apm, 'addToApmQueue');
 
@@ -129,7 +119,7 @@ describe('List', () => {
 
       const stubGetFilePath = stub(List, 'getFilePath').returns('/tmp/example');
       const stubReadFile = stub(CSON, 'readFileSync').returns({ packages: ['a', 'b', 'c'] });
-      const stubGetAllPackages = stub(List, 'getAllPackages').returns(['c', 'd']);
+      const stubGetAllPackages = stub(Util, 'getAllPackages').returns(['c', 'd']);
       const stubNotify = stub(List, 'notify');
       const stubApmQueue = stub(Apm, 'addToApmQueue');
 
@@ -148,7 +138,7 @@ describe('List', () => {
 
   it('tests syncToFile', () => {
     const stubGetFilePath = stub(List, 'getFilePath').returns('/tmp/example');
-    const stubGetAllPackages = stub(List, 'getAllPackages').returns(['c', 'd']);
+    const stubGetAllPackages = stub(Util, 'getAllPackages').returns(['c', 'd']);
     const stubWriteFile = stub(CSON, 'writeFileSync');
 
     List.syncToFile();

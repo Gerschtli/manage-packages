@@ -1,8 +1,9 @@
 'use babel';
 
 import { assert, restore, stub } from 'sinon';
+
 import Apm from '../lib/apm';
-import List from '../lib/list';
+import Util from '../lib/util';
 
 describe('Apm', () => {
   beforeEach(() => {
@@ -118,7 +119,7 @@ describe('Apm', () => {
         { name: 'name', install: true },
       ];
 
-      const stubAllPackages = stub(List, 'getAllPackages').returns([]);
+      const stubAllPackages = stub(Util, 'getAllPackages').returns([]);
       const stubExecuteApm = stub(Apm, 'executeApm');
 
       Apm.startNextInQueue();
@@ -135,7 +136,7 @@ describe('Apm', () => {
         { name: 'name2', install: false },
       ];
 
-      const stubAllPackages = stub(List, 'getAllPackages').returns(['name1', 'name2']);
+      const stubAllPackages = stub(Util, 'getAllPackages').returns(['name1', 'name2']);
       const stubExecuteApm = stub(Apm, 'executeApm');
 
       Apm.startNextInQueue();
