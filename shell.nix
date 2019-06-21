@@ -1,8 +1,6 @@
 with import <nixpkgs> { };
 
-stdenv.mkDerivation {
-  name = "manage-packages";
-
+mkShell {
   buildInputs = [
     nodejs
   ];
