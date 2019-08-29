@@ -1,7 +1,7 @@
 {
   "name": "manage-packages",
   "main": "./lib/manage-packages",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "author": {
     "name": "Tobias Happ",
     "email": "tobias.happ@gmx.de"
