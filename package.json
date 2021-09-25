@@ -25,11 +25,11 @@
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.26.0",
+    "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.22.1",
-    "npm-check-updates": "^10.3.1",
-    "sinon": "^9.2.4"
+    "eslint-plugin-import": "^2.24.2",
+    "npm-check-updates": "^11.8.5",
+    "sinon": "^11.1.2"
   },
   "dependencies": {
     "js-sha256": "^0.9.0",
